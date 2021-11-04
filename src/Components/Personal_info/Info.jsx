@@ -7,7 +7,7 @@ const Info = () => {
     const history = useHistory();
 
     function handleClick() {
-        history.push("/info");
+        history.push("/subjectchoice");
     }
     return (
         <div>
