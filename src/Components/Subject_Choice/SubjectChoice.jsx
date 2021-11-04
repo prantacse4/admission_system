@@ -3,9 +3,13 @@ import { Card, Button, Form, Container, ListGroup } from "react-bootstrap";
 import classes from "./subjectchoice.module.css";
 import { useHistory } from "react-router-dom";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { domain } from "../env";
+import axios from "axios";
 
 const SubjectChoice = () => {
     const history = useHistory();
+    const baseURL = domain;
+    const getGst_roll = localStorage.getItem("gst_roll");
 
     const subdata = [
         {
@@ -32,10 +36,44 @@ const SubjectChoice = () => {
             let [source_data] = tempData.splice(e.source.index, 1);
             tempData.splice(e.destination.index, 0, source_data);
             setSubjects(tempData);
-            console.log(subjects);
           };
 
+
+
     function handleClick() {
+        const body = JSON.stringify({
+            gst_roll:getGst_roll,
+            subjects:subjects
+            
+        });
+        console.log(body);
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+
+            axios.post(baseURL + "api/apply/", subjects, config)
+                .then((response) => {
+                    // history.push("/subjectchoice");
+                    console.log(response.data);
+                    alert("Success");
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    alert("Something Wrong");
+
+
+                    history.push("/summary");
+
+                });
+        } catch (error) {
+            console.log(error.response);
+            // throw error;
+            
+        }
+
         history.push("/info");
     }
     return (
@@ -64,17 +102,17 @@ const SubjectChoice = () => {
                 ref={provider.innerRef}
                 {...provider.droppableProps}
               >
-                {subjects?.map((user, index) => (
+                {subjects?.map((subj, index) => (
                   <Draggable
-                    key={user.code}
-                    draggableId={user.code}
+                    key={subj.code}
+                    draggableId={subj.code}
                     index={index}
                   >
                     {(provider) => (
                       <tr {...provider.draggableProps} ref={provider.innerRef}>
                         <td {...provider.dragHandleProps}> = </td>
-                        <td>{user.subject}</td>
-                        <td>{user.code}</td>
+                        <td>{subj.subject}</td>
+                        <td>{subj.code}</td>
                       </tr>
                     )}
                   </Draggable>

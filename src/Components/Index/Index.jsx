@@ -5,8 +5,12 @@ import LoginForm from "../Login/LoginForm.jsx";
 import MyNavbar from "../Navbar/MyNavbar.jsx";
 import Info from "../Personal_info/Info.jsx";
 import SubjectChoice from "../Subject_Choice/SubjectChoice.jsx";
+import { domain } from "../env";
+import Summary from "../Summary/Summary.jsx";
 
 const Index = () => {
+    localStorage.setItem('gst_roll', '');
+
     return (
         <div>
             <h1>Pranta</h1>
@@ -27,6 +31,9 @@ const Index = () => {
                     </Route>
                     <Route exact path="/subjectchoice">
                         <SubjectChoice />
+                    </Route>
+                    <Route exact path="/summary">
+                        <Summary />
                     </Route>
                 </Switch>
             </Router>
