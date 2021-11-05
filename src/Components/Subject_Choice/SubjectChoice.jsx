@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Card, Button, Form, Container, ListGroup } from "react-bootstrap";
 import classes from "./subjectchoice.module.css";
 import { useHistory } from "react-router-dom";
@@ -9,42 +9,50 @@ import axios from "axios";
 const SubjectChoice = () => {
     const history = useHistory();
     const baseURL = domain;
-    const getGst_roll = localStorage.getItem("gst_roll");
+    const getHsc_roll = localStorage.getItem("hsc_roll");
+    const [automigrate, setautomigrate] = useState("off");
 
     const subdata = [
         {
             subject: "CSE",
-            code: "101"
+            code: "101",
         },
         {
             subject: "PHYSICS",
-            code: "102"
+            code: "102",
         },
         {
             subject: "CHEMISTRY",
-            code: "103"
+            code: "103",
         },
-    ]
+    ];
 
-        const [subjects, setSubjects] = useState(subdata);
+    const [subjects, setSubjects] = useState(subdata);
 
-    
-  
-        const handleDragEnd = (e) => {
-            if (!e.destination) return;
-            let tempData = Array.from(subjects);
-            let [source_data] = tempData.splice(e.source.index, 1);
-            tempData.splice(e.destination.index, 0, source_data);
-            setSubjects(tempData);
-          };
+    const handleDragEnd = (e) => {
+        if (!e.destination) return;
+        let tempData = Array.from(subjects);
+        let [source_data] = tempData.splice(e.source.index, 1);
+        tempData.splice(e.destination.index, 0, source_data);
+        setSubjects(tempData);
+    };
 
+    const Cautomigrate = (event) => {
+      setautomigrate(event.target.value);
+      
 
+  };
 
     function handleClick() {
+
+        var has_auto_migrate = 0;
+        if(automigrate === "on"){
+          has_auto_migrate = 1;
+        }
         const body = JSON.stringify({
-            gst_roll:getGst_roll,
-            subjects:subjects
-            
+            hsc_roll: getHsc_roll,
+            has_auto_migrate:has_auto_migrate,
+            subjects: subjects,
         });
         console.log(body);
         try {
@@ -54,7 +62,8 @@ const SubjectChoice = () => {
                 },
             };
 
-            axios.post(baseURL + "api/apply/", subjects, config)
+            axios
+                .post(baseURL + "api/apply/", subjects, config)
                 .then((response) => {
                     // history.push("/subjectchoice");
                     console.log(response.data);
@@ -64,14 +73,11 @@ const SubjectChoice = () => {
                     console.log(error.response);
                     alert("Something Wrong");
 
-
                     history.push("/summary");
-
                 });
         } catch (error) {
             console.log(error.response);
             // throw error;
-            
         }
 
         history.push("/info");
@@ -84,48 +90,77 @@ const SubjectChoice = () => {
                         Drag and Drop according to your choice
                     </Card.Header>
                     <Card.Body>
-                      <Form>
+                        <Form>
+                            <DragDropContext onDragEnd={handleDragEnd}>
+                                <table className="table borderd">
+                                    <thead>
+                                        <tr>
+                                            <th />
+                                            <th>Subject Name</th>
+                                            <th>Subject COde</th>
+                                        </tr>
+                                    </thead>
+                                    <Droppable droppableId="droppable-1">
+                                        {(provider) => (
+                                            <tbody
+                                                className="text-capitalize"
+                                                ref={provider.innerRef}
+                                                {...provider.droppableProps}
+                                            >
+                                                {subjects?.map(
+                                                    (subj, index) => (
+                                                        <Draggable
+                                                            key={subj.code}
+                                                            draggableId={
+                                                                subj.code
+                                                            }
+                                                            index={index}
+                                                        >
+                                                            {(provider) => (
+                                                                <tr
+                                                                    {...provider.draggableProps}
+                                                                    ref={
+                                                                        provider.innerRef
+                                                                    }
+                                                                >
+                                                                    <td
+                                                                        {...provider.dragHandleProps}
+                                                                    >
+                                                                        {" "}
+                                                                        ={" "}
+                                                                    </td>
+                                                                    <td>
+                                                                        {
+                                                                            subj.subject
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        {
+                                                                            subj.code
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            )}
+                                                        </Draggable>
+                                                    )
+                                                )}
+                                                {provider.placeholder}
+                                            </tbody>
+                                        )}
+                                    </Droppable>
+                                </table>
+                            </DragDropContext>
 
-                      <DragDropContext onDragEnd={handleDragEnd}>
-        <table className="table borderd">
-          <thead>
-            <tr>
-              <th />
-              <th>Subject Name</th>
-              <th>Subject COde</th>
-            </tr>
-          </thead>
-          <Droppable droppableId="droppable-1">
-            {(provider) => (
-              <tbody
-                className="text-capitalize"
-                ref={provider.innerRef}
-                {...provider.droppableProps}
-              >
-                {subjects?.map((subj, index) => (
-                  <Draggable
-                    key={subj.code}
-                    draggableId={subj.code}
-                    index={index}
-                  >
-                    {(provider) => (
-                      <tr {...provider.draggableProps} ref={provider.innerRef}>
-                        <td {...provider.dragHandleProps}> = </td>
-                        <td>{subj.subject}</td>
-                        <td>{subj.code}</td>
-                      </tr>
-                    )}
-                  </Draggable>
-                ))}
-                {provider.placeholder}
-              </tbody>
-            )}
-          </Droppable>
-        </table>
-      </DragDropContext>
-
-
-                         
+                            <Form.Group
+                                className="mb-3"
+                                controlId="formBasicCheckbox"
+                            >
+                                <Form.Check
+                                    onChange={Cautomigrate}
+                                    type="checkbox"
+                                    label="Apply for Auto Migrate"
+                                />
+                            </Form.Group>
 
                             <Button
                                 variant="primary"

@@ -1,6 +1,8 @@
 .displayCenter {
     margin: 0 auto;
-    height: 90vh !important;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    min-height: 90vh !important;
     display: flex;
     align-items: center;
     justify-content: center;

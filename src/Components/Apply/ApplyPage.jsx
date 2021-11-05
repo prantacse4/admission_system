@@ -65,7 +65,7 @@ const ApplyPage = () => {
             await axios
                 .post(baseURL + "api/apply/", body, config)
                 .then((response) => {
-                    localStorage.setItem('gst_roll', gst_roll);
+                    localStorage.setItem('hsc_roll', hsc_roll);
                     history.push("/info");
                     console.log(response.data);
                     alert("Success");
@@ -74,7 +74,7 @@ const ApplyPage = () => {
                     console.log(error.response);
                     alert("Something Wrong");
 
-                    localStorage.setItem('gst_roll', gst_roll);
+                    localStorage.setItem('hsc_roll', hsc_roll);
 
                     history.push("/info");
 
