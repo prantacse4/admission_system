@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Form, Container, ListGroup } from "react-bootstrap";
+import { Card, Button, Form, Container } from "react-bootstrap";
 import classes from "./subjectchoice.module.css";
 import { useHistory } from "react-router-dom";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -17,7 +17,6 @@ const SubjectChoice = () => {
     const [subjects, setSubjects] = useState({});
     const [gSub_U, setgetSubjectsCngUnit] = useState({});
     getHsc_roll  = parseInt(getHsc_roll);
-    var subj = {};
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -39,29 +38,18 @@ const SubjectChoice = () => {
                     setgetSubjects(response.data.Data.subjects);
                     setgetSubjectsCngUnit(response.data.Data.subject_with_unit_change);
                     response.data.Data.subjects = response.data.Data.subjects.concat(response.data.Data.subject_with_unit_change);
-                    // console.log(response.data.Data.subjects);
-                    // console.log(response.data.Data);
-                    // console.log(response.data.Data.academic_info);
-                    setgst_data(response.data.Data.gst_info);
-                    // subj = JSON.stringify(response.data.Data.subjects
-                    // );
-                    // console.log(subj);
 
                     setSubjects(response.data.Data.subjects);
                     setLoading(true);
                     
-                    // history.push("/subjectchoice");
-                    // alert("Success");
+               
                 })
                 .catch((error) => {
-                    console.log(error.response);
                     alert("Something Wrong");
 
-                    // history.push("/subjectchoice");
                 });
         } catch (error) {
             console.log(error.response);
-            // throw error;
         }
         
     }, []);
@@ -80,7 +68,8 @@ const SubjectChoice = () => {
 
   };
 
-    function handleClick() {
+  const handleClick = async (event) =>  {
+        event.preventDefault();
 
         var has_auto_migrate = 0;
         if(automigrate === "on"){
@@ -100,26 +89,24 @@ const SubjectChoice = () => {
             };
 
             axios
-                .post(baseURL + "api/apply/", subjects, config)
+                .post(baseURL + "api/subject-choice", body, config)
                 .then((response) => {
-                    // history.push("/subjectchoice");
                     console.log(response.data);
-                    alert("Success");
+                    history.push("/summary");
+
                 })
                 .catch((error) => {
                     console.log(error.response);
                     alert("Something Wrong");
 
-                    history.push("/summary");
                 });
         } catch (error) {
             console.log(error.response);
             // throw error;
         }
 
-        history.push("/info");
     }
-    if (loading==false) return null;
+    if (loading===false) return null;
 
     return (
         <div>

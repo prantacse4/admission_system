@@ -38,6 +38,51 @@ const Summary = () => {
     const [M_name, setM_name] = useState("Mother's Full Name");
     const [Full_name, setFull_name] = useState("Full Name");
     const getGst_roll = localStorage.getItem("gst_roll");
+    const [academic, setAcademic] = useState({});
+    const [gst_data, setgst_data] = useState({});
+    const [gSub, setgetSubjects] = useState({});
+    const [gSub_U, setgetSubjectsCngUnit] = useState({});
+    const [unit_change, setunit_change] = useState("off");
+    const [loading, setLoading] = useState(false);
+    var getHsc_roll = localStorage.getItem("hsc_roll");
+    getHsc_roll  = parseInt(getHsc_roll);
+
+    useEffect(() => {
+        const body = JSON.stringify({
+            hsc_roll: getHsc_roll,
+        });
+
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+
+            axios
+                .post(baseURL + "api/get-student", body, config)
+                .then((response) => {
+                    setAcademic(response.data.Data.academic_info);
+                    setgetSubjects(response.data.Data.subjects);
+                    setgetSubjectsCngUnit(response.data.Data.subject_with_unit_change);
+          
+                    setgst_data(response.data.Data.gst_info);
+                    setLoading(true);
+                    
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    alert("Something Wrong");
+
+                    // history.push("/subjectchoice");
+                });
+        } catch (error) {
+            console.log(error.response);
+            // throw error;
+        }
+        
+    }, []);
+
 
     const Cpresent_address = (event) => {
         setpresent_address(event.target.value);
@@ -96,41 +141,28 @@ const Summary = () => {
                         <tbody>
                                 <tr>
                                     <th>Full Name</th>
-                                    <td>{Full_name}</td>
+                                    <td>{academic.name}</td>
+                                </tr>
+                                <tr>
+                                    <th>GST Roll</th>
+                                    <td>{gst_data.gst_roll}</td>
+                                </tr>
+                                <tr>
+                                    <th>GST Rank</th>
+                                    <td>{gst_data.gst_position}</td>
                                 </tr>
                                 <tr>
                                     <th>Father's Name</th>
-                                    <td>{F_name}</td>
+                                    <td>{academic.father_name}</td>
                                 </tr>
                                 <tr>
                                     <th>Mother's Name</th>
-                                    <td>{M_name}</td>
+                                    <td>{academic.mother_name}</td>
                                 </tr>
                             </tbody>
                         </Table>
 
-                        <div>
-                            <h4>Present Address</h4>
-                            <p>dkfhgksdjgdf</p> <br />
-                        </div>
 
-                        <div>
-                            <h4>Permanent Address</h4>
-                            <p>dkfhgksdjgdf</p>
-                            <br />
-                        </div>
-
-                        <ListGroup as="ul">
-                            <ListGroup.Item as="li" active>
-                                Your Subject Order
-                            </ListGroup.Item>
-
-                            {subjects.map((sub) => (
-                                <ListGroup.Item as="li" key={sub.code}>
-                                    {sub.subject}
-                                </ListGroup.Item>
-                            ))}
-                        </ListGroup>
 
                         <br />
 

@@ -9,7 +9,6 @@ import {
 } from "react-bootstrap";
 import classes from "./info.module.css";
 import { useHistory } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { domain } from "../env";
 
@@ -26,9 +25,6 @@ const Info = () => {
     const [gSub, setgetSubjects] = useState({});
     const [gSub_U, setgetSubjectsCngUnit] = useState({});
     const [unit_change, setunit_change] = useState("off");
-    const [F_name, setF_name] = useState("Father's Full Name");
-    const [M_name, setM_name] = useState("Mother's Full Name");
-    const [Full_name, setFull_name] = useState("Full Name");
     const [loading, setLoading] = useState(false);
     var getHsc_roll = localStorage.getItem("hsc_roll");
     getHsc_roll  = parseInt(getHsc_roll);
@@ -51,29 +47,19 @@ const Info = () => {
                     setAcademic(response.data.Data.academic_info);
                     setgetSubjects(response.data.Data.subjects);
                     setgetSubjectsCngUnit(response.data.Data.subject_with_unit_change);
-                    console.log(response.data.Data);
-                    console.log(response.data.Data.academic_info);
-                    console.log(response.data.Data.gst_info);
                     setgst_data(response.data.Data.gst_info);
                     setLoading(true);
-                    
-                    // history.push("/subjectchoice");
-                    // alert("Success");
                 })
                 .catch((error) => {
                     console.log(error.response);
                     alert("Something Wrong");
-
-                    // history.push("/subjectchoice");
                 });
         } catch (error) {
             console.log(error.response);
-            // throw error;
         }
         
     }, []);
 
-    // const [subjects, setSubjects] = useState(subdata);
 
     const Cpresent_address = (event) => {
         setpresent_address(event.target.value);
@@ -120,26 +106,18 @@ const Info = () => {
             await axios
                 .post(baseURL + "api/apply/payment", body, config)
                 .then((response) => {
-                    console.log(response.data);
                     history.push("/subjectchoice");
-                    // alert("Success");
                 })
                 .catch((error) => {
-                    console.log(error.response);
                     alert("Something Wrong");
 
-                    // history.push("/subjectchoice");
                 });
         } catch (error) {
             console.log(error.response);
-            // throw error;
         }
     };
 
-    // function handleClick() {
-    //     history.push("/subjectchoice");
-    // }
-    if (loading==false) return null;
+    if (loading===false) return null;
     return (
         <div>
             <Container className={classes.displayCenter}>
