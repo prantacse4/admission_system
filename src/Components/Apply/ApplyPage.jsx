@@ -63,11 +63,12 @@ const ApplyPage = () => {
             };
 
             await axios
-                .post(baseURL + "api/apply/", body, config)
+                .post(baseURL + "api/apply", body, config)
                 .then((response) => {
+                    console.log(response.data);
+
                     localStorage.setItem('hsc_roll', hsc_roll);
                     history.push("/info");
-                    console.log(response.data);
                     alert("Success");
                 })
                 .catch((error) => {
@@ -76,7 +77,7 @@ const ApplyPage = () => {
 
                     localStorage.setItem('hsc_roll', hsc_roll);
 
-                    history.push("/info");
+                    // history.push("/info");
 
                 });
         } catch (error) {
