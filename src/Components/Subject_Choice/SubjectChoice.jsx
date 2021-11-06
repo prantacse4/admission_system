@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Button, Form, Container, ListGroup } from "react-bootstrap";
 import classes from "./subjectchoice.module.css";
 import { useHistory } from "react-router-dom";
@@ -9,25 +9,62 @@ import axios from "axios";
 const SubjectChoice = () => {
     const history = useHistory();
     const baseURL = domain;
-    const getHsc_roll = localStorage.getItem("hsc_roll");
+    var getHsc_roll = localStorage.getItem("hsc_roll");
     const [automigrate, setautomigrate] = useState("off");
+    const [academic, setAcademic] = useState({});
+    const [gst_data, setgst_data] = useState({});
+    const [gSub, setgetSubjects] = useState({});
+    const [subjects, setSubjects] = useState({});
+    const [gSub_U, setgetSubjectsCngUnit] = useState({});
+    getHsc_roll  = parseInt(getHsc_roll);
+    var subj = {};
+    const [loading, setLoading] = useState(false);
 
-    const subdata = [
-        {
-            subject: "CSE",
-            code: "101",
-        },
-        {
-            subject: "PHYSICS",
-            code: "102",
-        },
-        {
-            subject: "CHEMISTRY",
-            code: "103",
-        },
-    ];
+    useEffect(() => {
+        const body = JSON.stringify({
+            hsc_roll: getHsc_roll,
+        });
 
-    const [subjects, setSubjects] = useState(subdata);
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+
+            axios
+                .post(baseURL + "api/get-student", body, config)
+                .then((response) => {
+                    setAcademic(response.data.Data.academic_info);
+                    setgetSubjects(response.data.Data.subjects);
+                    setgetSubjectsCngUnit(response.data.Data.subject_with_unit_change);
+                    response.data.Data.subjects = response.data.Data.subjects.concat(response.data.Data.subject_with_unit_change);
+                    // console.log(response.data.Data.subjects);
+                    // console.log(response.data.Data);
+                    // console.log(response.data.Data.academic_info);
+                    setgst_data(response.data.Data.gst_info);
+                    // subj = JSON.stringify(response.data.Data.subjects
+                    // );
+                    // console.log(subj);
+
+                    setSubjects(response.data.Data.subjects);
+                    setLoading(true);
+                    
+                    // history.push("/subjectchoice");
+                    // alert("Success");
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    alert("Something Wrong");
+
+                    // history.push("/subjectchoice");
+                });
+        } catch (error) {
+            console.log(error.response);
+            // throw error;
+        }
+        
+    }, []);
 
     const handleDragEnd = (e) => {
         if (!e.destination) return;
@@ -82,6 +119,8 @@ const SubjectChoice = () => {
 
         history.push("/info");
     }
+    if (loading==false) return null;
+
     return (
         <div>
             <Container className={classes.displayCenter}>
@@ -97,7 +136,7 @@ const SubjectChoice = () => {
                                         <tr>
                                             <th />
                                             <th>Subject Name</th>
-                                            <th>Subject COde</th>
+                                            <th>Subject Code</th>
                                         </tr>
                                     </thead>
                                     <Droppable droppableId="droppable-1">
@@ -110,9 +149,9 @@ const SubjectChoice = () => {
                                                 {subjects?.map(
                                                     (subj, index) => (
                                                         <Draggable
-                                                            key={subj.code}
+                                                            key={subj.subj_code}
                                                             draggableId={
-                                                                subj.code
+                                                                subj.subj_code
                                                             }
                                                             index={index}
                                                         >
@@ -131,12 +170,12 @@ const SubjectChoice = () => {
                                                                     </td>
                                                                     <td>
                                                                         {
-                                                                            subj.subject
+                                                                            subj.subj_name
                                                                         }
                                                                     </td>
                                                                     <td>
                                                                         {
-                                                                            subj.code
+                                                                            subj.subj_code
                                                                         }
                                                                     </td>
                                                                 </tr>

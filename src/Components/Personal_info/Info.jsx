@@ -77,7 +77,6 @@ const Info = () => {
 
     const Cpresent_address = (event) => {
         setpresent_address(event.target.value);
-        console.log(academic);
     };
     const Cpermanent_address = (event) => {
         setpermanent_address(event.target.value);
