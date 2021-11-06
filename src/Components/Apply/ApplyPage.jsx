@@ -65,17 +65,20 @@ const ApplyPage = () => {
             await axios
                 .post(baseURL + "api/apply", body, config)
                 .then((response) => {
-                    console.log(response.data);
-
-                    localStorage.setItem('hsc_roll', hsc_roll);
-                    history.push("/info");
-                    alert("Success");
+                    console.log(response.data.success);
+                    if(response.data.success===true){
+                        localStorage.setItem('hsc_roll', hsc_roll);
+                        history.push("/info");
+                    }
+                    else{
+                        alert("Your data is not correct");
+                    }
+                    
+                    
                 })
                 .catch((error) => {
                     console.log(error.response);
-                    alert("Something Wrong");
-
-                    localStorage.setItem('hsc_roll', hsc_roll);
+                    alert("Your data is not correct");
 
                     // history.push("/info");
 
