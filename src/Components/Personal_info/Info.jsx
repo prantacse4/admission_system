@@ -22,13 +22,14 @@ const Info = () => {
     const [mobile, setmobile] = useState(null);
     const [email, setemail] = useState(null);
     const [academic, setAcademic] = useState({});
+    const [gst_data, setgst_data] = useState({});
     const [gSub, setgetSubjects] = useState({});
     const [gSub_U, setgetSubjectsCngUnit] = useState({});
     const [unit_change, setunit_change] = useState("off");
     const [F_name, setF_name] = useState("Father's Full Name");
     const [M_name, setM_name] = useState("Mother's Full Name");
     const [Full_name, setFull_name] = useState("Full Name");
-
+    const [loading, setLoading] = useState(false);
     var getHsc_roll = localStorage.getItem("hsc_roll");
     getHsc_roll  = parseInt(getHsc_roll);
 
@@ -50,7 +51,11 @@ const Info = () => {
                     setAcademic(response.data.Data.academic_info);
                     setgetSubjects(response.data.Data.subjects);
                     setgetSubjectsCngUnit(response.data.Data.subject_with_unit_change);
-                    
+                    console.log(response.data.Data);
+                    console.log(response.data.Data.academic_info);
+                    console.log(response.data.Data.gst_info);
+                    setgst_data(response.data.Data.gst_info);
+                    setLoading(true);
                     
                     // history.push("/subjectchoice");
                     // alert("Success");
@@ -67,21 +72,8 @@ const Info = () => {
         }
         
     }, []);
-    const subdata = [
-        {
-            subject: "CSE",
-            code: "101",
-        },
-        {
-            subject: "PHYSICS",
-            code: "102",
-        },
-        {
-            subject: "CHEMISTRY",
-            code: "103",
-        },
-    ];
-    const [subjects, setSubjects] = useState(subdata);
+
+    // const [subjects, setSubjects] = useState(subdata);
 
     const Cpresent_address = (event) => {
         setpresent_address(event.target.value);
@@ -148,6 +140,7 @@ const Info = () => {
     // function handleClick() {
     //     history.push("/subjectchoice");
     // }
+    if (loading==false) return null;
     return (
         <div>
             <Container className={classes.displayCenter}>
@@ -178,24 +171,24 @@ const Info = () => {
                             <tbody>
                                 <tr>
                                     <th>HSC Roll</th>
-                                    <td>{Full_name}</td>
+                                    <td>{academic.hsc_roll}</td>
                                 </tr>
                                 <tr>
                                     <th>Passing Year</th>
-                                    <td>{F_name}</td>
+                                    <td>{academic.hsc_passing_year}</td>
                                 </tr>
                                 <tr>
                                     <th>Board</th>
-                                    <td>{M_name}</td>
+                                    <td>{academic.hsc_board}</td>
                                 </tr>
 
                                 <tr>
                                     <th>Group</th>
-                                    <td>{M_name}</td>
+                                    <td>{academic.hsc_group}</td>
                                 </tr>
                                 <tr>
-                                    <th>CGPA</th>
-                                    <td>{M_name}</td>
+                                    <th>GPA</th>
+                                    <td>{academic.hsc_gpa}</td>
                                 </tr>
                             </tbody>
                         </Table>
@@ -205,20 +198,24 @@ const Info = () => {
                             <tbody>
                                 <tr>
                                     <th>GST Roll</th>
-                                    <td>{Full_name}</td>
+                                    <td>{gst_data.gst_roll}</td>
                                 </tr>
                                 <tr>
                                     <th>Unit</th>
-                                    <td>{F_name}</td>
+                                    <td>{gst_data.gst_unit}</td>
+                                </tr>
+                                <tr>
+                                    <th>GST Board</th>
+                                    <td>{gst_data.hsc_board}</td>
                                 </tr>
                                 <tr>
                                     <th>Rank</th>
-                                    <td>{M_name}</td>
+                                    <td>{gst_data.gst_position}</td>
                                 </tr>
 
                                 <tr>
                                     <th>Total Marks</th>
-                                    <td>{M_name}</td>
+                                    <td>{gst_data.total_score}</td>
                                 </tr>
                             </tbody>
                         </Table>
