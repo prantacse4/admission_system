@@ -22,7 +22,7 @@ const ApplyPage = () => {
 
     ];
     const options2 = [
-        { value: "Barisal", label: "Barishal" },
+        { value: "Barisal", label: "Barisal" },
         { value: "Dhaka", label: "Dhaka" },
         { value: "Jessore", label: "Jessore" },
         { value: "Rajshahi", label: "Rajshahi" },
