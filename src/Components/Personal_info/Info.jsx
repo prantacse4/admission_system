@@ -206,7 +206,7 @@ const Info = () => {
                                 <Form.Check
                                     onChange={Cunit_change}
                                     type="checkbox"
-                                    label="Apply for Division Change"
+                                    label="Apply for Unit Change"
                                 />
                             </Form.Group>
                             <Form.Group
