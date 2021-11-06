@@ -26,8 +26,8 @@ const Info = () => {
     const [M_name, setM_name] = useState("Mother's Full Name");
     const [Full_name, setFull_name] = useState("Full Name");
 
-    const getHsc_roll = localStorage.getItem("hsc_roll");
-
+    var getHsc_roll = localStorage.getItem("hsc_roll");
+    getHsc_roll  = parseInt(getHsc_roll);
     const subdata = [
         {
             subject: "CSE",
@@ -71,13 +71,14 @@ const Info = () => {
 
         const body = JSON.stringify({
             hsc_roll: getHsc_roll,
-            present_address: present_address,
-            permanent_address: permanent_address,
+            has_unit_change: myunit,
             phone: mobile,
             email: email,
-            has_unit_change: myunit,
+            present_address: present_address,
+            permanent_address: permanent_address,
         });
         console.log(body);
+
         try {
             const config = {
                 headers: {
@@ -86,17 +87,17 @@ const Info = () => {
             };
 
             await axios
-                .post(baseURL + "api/apply/", body, config)
+                .post(baseURL + "api/apply/payment", body, config)
                 .then((response) => {
-                    history.push("/subjectchoice");
                     console.log(response.data);
-                    alert("Success");
+                    history.push("/subjectchoice");
+                    // alert("Success");
                 })
                 .catch((error) => {
                     console.log(error.response);
                     alert("Something Wrong");
 
-                    history.push("/subjectchoice");
+                    // history.push("/subjectchoice");
                 });
         } catch (error) {
             console.log(error.response);
@@ -148,10 +149,6 @@ const Info = () => {
                                     <td>{M_name}</td>
                                 </tr>
 
-                                <tr>
-                                    <th>Board</th>
-                                    <td>{M_name}</td>
-                                </tr>
                                 <tr>
                                     <th>Group</th>
                                     <td>{M_name}</td>
@@ -227,11 +224,11 @@ const Info = () => {
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="mobile">
-                                <Form.Label>Mobile</Form.Label>
+                                <Form.Label>Mobile (Must be 11 Didits)</Form.Label>
                                 <Form.Control
                                     onChange={Cmobile}
                                     type="text"
-                                    placeholder="Enter your mobile"
+                                    placeholder="01XXXXXXXXX"
                                     required
                                 />
                             </Form.Group>

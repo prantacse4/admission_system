@@ -11,7 +11,7 @@ const ApplyPage = () => {
     const [gst_roll, setgst_roll] = useState(null);
     const [hsc_roll, sethsc_roll] = useState(null);
     const [hsc_pass, sethsc_pass] = useState(null);
-
+    localStorage.setItem('hsc_roll', null);
     const [board, setboard] = useState(null);
     const history = useHistory();
 
@@ -107,7 +107,7 @@ const ApplyPage = () => {
                             >
                                 <Form.Label>GST ROLL</Form.Label>
                                 <Form.Control
-                                    type="text"
+                                    type="number"
                                     placeholder="Enter GST ROLL"
                                     required
                                     onChange={gst_rollc}
@@ -120,7 +120,7 @@ const ApplyPage = () => {
                             >
                                 <Form.Label>HSC ROLL</Form.Label>
                                 <Form.Control
-                                    type="text"
+                                    type="number"
                                     placeholder="Enter HSC ROLL"
                                     required
                                     onChange={hsc_rollc}
