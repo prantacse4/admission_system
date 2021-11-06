@@ -18,11 +18,19 @@ const ApplyPage = () => {
     const options = [
         { value: "2020", label: "2020" },
         { value: "2019", label: "2019" },
+        { value: "2015", label: "2015" },
+
     ];
     const options2 = [
-        { value: "Barishal", label: "Barishal" },
+        { value: "Barisal", label: "Barishal" },
         { value: "Dhaka", label: "Dhaka" },
-        { value: "Jashore", label: "Jashore" },
+        { value: "Jessore", label: "Jessore" },
+        { value: "Rajshahi", label: "Rajshahi" },
+        { value: "Comilla", label: "Comilla" },
+        { value: "Chittagong", label: "Chittagong" },
+        { value: "Dinajpur", label: "Dinajpur" },
+        { value: "Sylhet", label: "Sylhet" },
+        { value: "Madrasah", label: "Madrasah" },
     ];
 
     const [submitData, setsubmitData] = useState({
@@ -107,7 +115,7 @@ const ApplyPage = () => {
                             >
                                 <Form.Label>GST ROLL</Form.Label>
                                 <Form.Control
-                                    type="number"
+                                    type="text"
                                     placeholder="Enter GST ROLL"
                                     required
                                     onChange={gst_rollc}
